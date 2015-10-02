@@ -1,0 +1,45 @@
+<!doctype html>
+<html>
+<head>
+  <title>Releases</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='bootstrap.min.css') }}">
+  <script src="{{ url_for('static', filename='jquery-1.11.3.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='bootstrap.min.js') }}"></script>
+</head>
+<body>
+<div class="container-fluid">
+  <h1>Releases</h1>
+  <div id="information">
+    <div id="action_bar">
+      <a href="/" class="action">Home</a> |
+      <a href="/logout" class="action">Logout</a>
+    </div>
+    <br>
+    <table class="list_table">
+      <tr>
+        <th>Artist</th>
+        <th>Release</th>
+        <th>Date</th>
+        <th>Format</th>
+        <th>Label</th>
+        <th>Cat #</th>
+        <th>Barcode</th>
+      </tr>
+{% for release in releases %}
+      <tr>
+        <td>{{ release['artist']  }}</td>
+        <td>{{ release['title'] }}</td>
+        <td>{{ release['date'] }}</td>
+        <td>{{ release['format'] }}</td>
+        <td>{{ release['label'] }}</td>
+        <td>{{ release['catalog-number'] }}</td>
+        <td>{{ release['barcode'] }}</td>
+      </tr>
+{% endfor %}
+    </table>
+  </div>
+</div>
+</body>
+</html>
