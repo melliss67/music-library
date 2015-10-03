@@ -52,7 +52,8 @@ def releaseInfo(searchResults):
     for result in searchResults:
         relInfo = {'artist': '', 'title': '', 'date': '', 
               'label-info-list': '', 'label': '', 'catalog-number': '', 
-              'medium-list': '', 'format': '', 'barcode': '', 'mbid': ''}
+              'medium-list': '', 'format': '', 'barcode': '', 'mbid': '', 
+              'asin': ''}
         relInfo['artist'] = result['artist-credit-phrase']
         relInfo['title'] = result['title']
         relInfo['mbid'] = result['id']
@@ -66,46 +67,63 @@ def releaseInfo(searchResults):
                       ['catalog-number']
         if 'medium-list' in result:
             relInfo['medium-list'] = result['medium-list']
-            relInfo['format'] = result['medium-list'][1]['format']
+            if 'format' in result['medium-list'][1]:
+                relInfo['format'] = result['medium-list'][1]['format']
         if 'barcode' in result:
             relInfo['barcode'] = result['barcode']
+        if 'asin' in result:
+            relInfo['asin'] = result['asin']
         allRealeases.append(relInfo)
     return allRealeases
 
 
-@app.route('/')
+@app.route('/', methods=['GET','POST'])
 def index():
-    return 'here it is'
-    
-    
+    if request.method == 'POST':
+        searched = request.form['searched']
+        search_by = request.form['search_by']
+        # return search_by
+        if search_by == 'Barcode':
+            return redirect(url_for('barcodeSearch', barcode=searched))
+        if search_by == 'CatNo':
+            return redirect(url_for('catnoSearch', catno=searched))
+        if search_by == 'Artist':
+            return redirect(url_for('artistSearch', artist=searched))
+        else:
+            return render_template('index.html')
+    else:
+        return render_template('index.html')
+
+
 @app.route('/artist_search/<string:artist>', methods=['GET','POST'])
 def artistSearch(artist):
     if request.method == 'POST':
         artist = request.form['artist']
+    searched = artist
     result = musicbrainzngs.search_releases(artist=artist, limit=5)
     # relList = result['release-list']
     relList = releaseInfo(result['release-list'])
     return render_template('release_results.html', releases=relList, 
-          search_by='artist')
+          search_by='artist', searched=searched)
 
 
 @app.route('/catno_search/<string:catno>', methods=['GET','POST'])
 def catnoSearch(catno):
     if request.method == 'POST':
         catno = request.form['catno']
+    searched = catno
     result = musicbrainzngs.search_releases(catno=catno, limit=5)
     # relList = result['release-list']
     relList = releaseInfo(result['release-list'])
     return render_template('release_results.html', releases=relList, 
-          search_by='catno')
+          search_by='catno', searched=searched)
           
           
 @app.route('/barcode_search/<string:barcode>', methods=['GET','POST'])
 def barcodeSearch(barcode):
-    searched = ''
     if request.method == 'POST':
         barcode = request.form['barcode']
-        searched = barcode
+    searched = barcode
     result = musicbrainzngs.search_releases(barcode=barcode, limit=5)
     # relList = result['release-list']
     relList = releaseInfo(result['release-list'])

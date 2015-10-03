@@ -1,0 +1,32 @@
+<!doctype html>
+<html>
+<head>
+  <title>Home Page</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='bootstrap.min.css') }}">
+  <script src="{{ url_for('static', filename='jquery-1.11.3.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='bootstrap.min.js') }}"></script>
+</head>
+<body>
+<div class="container-fluid">
+  <h1>Choose Search Criteria</h1>
+  <div id="information">
+    <div id="action_bar">
+      <a href="/logout" class="action">Logout</a>
+    </div>
+    <br>
+    <form action="/" method="POST">
+      Search By: 
+      <select name="search_by">
+        <option value"barcode">Barcode</option>
+        <option value"catno">CatNo</option>
+        <option value"artist">Artist</option>
+      </select>
+      <input type="text" name="searched"><br>
+      <input type="submit" value="search">
+    </form>
+  </div>
+</div>
+</body>
+</html>
