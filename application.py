@@ -52,9 +52,10 @@ def releaseInfo(searchResults):
     for result in searchResults:
         relInfo = {'artist': '', 'title': '', 'date': '', 
               'label-info-list': '', 'label': '', 'catalog-number': '', 
-              'medium-list': '', 'format': '', 'barcode': ''}
+              'medium-list': '', 'format': '', 'barcode': '', 'mbid': ''}
         relInfo['artist'] = result['artist-credit-phrase']
         relInfo['title'] = result['title']
+        relInfo['mbid'] = result['id']
         if 'date' in result:
             relInfo['date'] = result['date']
         if 'label-info-list' in result:
@@ -79,14 +80,37 @@ def index():
     
 @app.route('/artist_search/<string:artist>', methods=['GET','POST'])
 def artistSearch(artist):
+    if request.method == 'POST':
+        artist = request.form['artist']
     result = musicbrainzngs.search_releases(artist=artist, limit=5)
-    if not result['release-list']:
-        return 'no results'
     # relList = result['release-list']
     relList = releaseInfo(result['release-list'])
-    
-    return render_template('release_results.html', releases=relList)
-    
+    return render_template('release_results.html', releases=relList, 
+          search_by='artist')
+
+
+@app.route('/catno_search/<string:catno>', methods=['GET','POST'])
+def catnoSearch(catno):
+    if request.method == 'POST':
+        catno = request.form['catno']
+    result = musicbrainzngs.search_releases(catno=catno, limit=5)
+    # relList = result['release-list']
+    relList = releaseInfo(result['release-list'])
+    return render_template('release_results.html', releases=relList, 
+          search_by='catno')
+          
+          
+@app.route('/barcode_search/<string:barcode>', methods=['GET','POST'])
+def barcodeSearch(barcode):
+    searched = ''
+    if request.method == 'POST':
+        barcode = request.form['barcode']
+        searched = barcode
+    result = musicbrainzngs.search_releases(barcode=barcode, limit=5)
+    # relList = result['release-list']
+    relList = releaseInfo(result['release-list'])
+    return render_template('release_results.html', releases=relList, 
+          search_by='barcode', searched=searched)
 
 
 @app.route('/login')

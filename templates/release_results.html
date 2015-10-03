@@ -10,13 +10,17 @@
 </head>
 <body>
 <div class="container-fluid">
-  <h1>Releases</h1>
+  <h1>Releases Search by {{ search_by }}</h1>
   <div id="information">
     <div id="action_bar">
       <a href="/" class="action">Home</a> |
       <a href="/logout" class="action">Logout</a>
     </div>
     <br>
+    <form action="{{ search_by }}_search" method="POST">
+      <input type="text" name="{{ search_by }}" value="{{ searched }}"><br>
+      <input type="submit" value="search">
+    </form>
     <table class="list_table">
       <tr>
         <th>Artist</th>
@@ -26,6 +30,8 @@
         <th>Label</th>
         <th>Cat #</th>
         <th>Barcode</th>
+        <th>MBID</th>
+        <th>-</th>
       </tr>
 {% for release in releases %}
       <tr>
@@ -36,7 +42,12 @@
         <td>{{ release['label'] }}</td>
         <td>{{ release['catalog-number'] }}</td>
         <td>{{ release['barcode'] }}</td>
+        <td><a href="https://musicbrainz.org/release/{{ release['mbid'] }}"target="_blank">{{ release['mbid'] }}</a></td>
+        <td><a href="#">add</a></td>
       </tr>
+      {% for item in release %}
+        <!-- {{ item }}<br> -->
+      {% endfor %}
 {% endfor %}
     </table>
   </div>
