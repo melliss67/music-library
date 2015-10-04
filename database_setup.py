@@ -18,14 +18,15 @@ class Releases(Base):
     id = Column(Integer, primary_key=True)
     user_id = Column(Integer,ForeignKey('users.id'))
     title = Column(String(250), nullable=False)
-    artists = Column(String(250), nullable=False)
-    release_date = Column(Date)
+    artist = Column(String(250), nullable=False)
+    release_date = Column(String(30))
     label = Column(String(50))
     catalog_number = Column(String(30))
     barcode = Column(String(30))
     mbid = Column(Integer)
+    asin = Column(Integer)
     format = Column(String(30))
     
 
-engine = create_engine('sqlite:///gifts.db')
+engine = create_engine('sqlite:///music.db')
 Base.metadata.create_all(engine)

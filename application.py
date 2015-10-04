@@ -32,7 +32,7 @@ musicbrainzngs.set_useragent(
     "",
 )
     
-engine = create_engine('sqlite:///gifts.db')
+engine = create_engine('sqlite:///music.db')
 Base.metadata.bind = engine
 
 DBSession = sessionmaker(bind=engine)
@@ -43,6 +43,14 @@ def getUserID(email):
     try:
         user = session.query(Users).filter_by(email=email).one()
         return user.id
+    except:
+        return None
+
+
+def recordExists(mbid):
+    try:
+        release = session.query(Releases).filter_by(mbid=mbid).one()
+        return release
     except:
         return None
 
@@ -93,6 +101,33 @@ def index():
             return render_template('index.html')
     else:
         return render_template('index.html')
+        
+
+@app.route('/add_update_rel', methods=['POST'])
+def addUpdateRel():
+    release = recordExists(request.form['mbid'])
+    if not release:
+        newRelease = Releases(artist=request.form['artist'], 
+              title=request.form['title'], release_date=request.form['date'], 
+              format=request.form['format'], label=request.form['label'],
+              catalog_number=request.form['catalog-number'], barcode=request.form['barcode'],
+              mbid=request.form['mbid'], asin=request.form['asin']
+              )
+        session.add(newRelease)
+        session.commit()
+        return redirect(url_for('index'))
+    else:
+        release.artist = artist=request.form['artist']
+        release.title = artist=request.form['title']
+        release.release_date = artist=request.form['date']
+        release.format = artist=request.form['format']
+        release.label = artist=request.form['label']
+        release.catalog_number = artist=request.form['catalog-number']
+        release.barcode = artist=request.form['barcode']
+        release.mbid = artist=request.form['mbid']
+        release.asin = artist=request.form['asin']
+        session.commit()
+        return redirect(url_for('index'))
 
 
 @app.route('/artist_search/<string:artist>', methods=['GET','POST'])

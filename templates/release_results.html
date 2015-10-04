@@ -34,9 +34,19 @@
         <th>Cat #</th>
       </tr>
 {% for release in releases %}
+    <form action = '/add_update_rel' method="POST">
+      <input type="hidden" name="artist" value="{{ release['artist'] }}">
+      <input type="hidden" name="title" value="{{ release['title'] }}">
+      <input type="hidden" name="date" value="{{ release['date'] }}">
+      <input type="hidden" name="format" value="{{ release['format'] }}">
+      <input type="hidden" name="label" value="{{ release['label'] }}">
+      <input type="hidden" name="catalog-number" value="{{ release['catalog-number'] }}">
+      <input type="hidden" name="barcode" value="{{ release['barcode'] }}">
+      <input type="hidden" name="mbid" value="{{ release['mbid'] }}">
+      <input type="hidden" name="asin" value="{{ release['asin'] }}">
       <tr>
-        <td><a href="#">add</a></td>
-        <td>{{ release['artist']  }}</td>
+        <td><input type="submit" value="add"></td>
+        <td>{{ release['artist'] }}</td>
         <td>{{ release['title'] }}</td>
         <td>{{ release['date'] }}</td>
         <td>{{ release['format'] }}</td>
@@ -50,9 +60,11 @@
         <td colspan="2"><a href="https://musicbrainz.org/release/{{ release['mbid'] }}"target="_blank">{{ release['mbid'] }}</a></td>
         <td colspan="2"><a href="http://www.amazon.com/gp/product/{{ release['asin'] }}"target="_blank">{{ release['asin'] }}</a></td>
       </tr>
+      <!-- {{ release['release-group'] }}
       {% for item in release %}
-        <!-- {{ item }}<br> -->
-      {% endfor %}
+        {{ item }}<br>
+      {% endfor %} -->
+    </form>  
 {% endfor %}
     </table>
   </div>
