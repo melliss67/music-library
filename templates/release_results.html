@@ -57,8 +57,12 @@
         <td colspan="2">
           Barcode: {{ release['barcode'] }}
         </td>
-        <td colspan="2"><a href="https://musicbrainz.org/release/{{ release['mbid'] }}"target="_blank">{{ release['mbid'] }}</a></td>
-        <td colspan="2"><a href="http://www.amazon.com/gp/product/{{ release['asin'] }}"target="_blank">{{ release['asin'] }}</a></td>
+        <td colspan="2">
+          MusicBrainz: <a href="https://musicbrainz.org/release/{{ release['mbid'] }}"target="_blank">{{ release['mbid'] }}</a>
+        </td>
+        <td colspan="2">
+          Amazon: <a href="http://www.amazon.com/gp/product/{{ release['asin'] }}"target="_blank">{{ release['asin'] }}</a>
+        </td>
       </tr>
       <!-- {{ release['release-group'] }}
       {% for item in release %}

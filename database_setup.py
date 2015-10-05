@@ -26,7 +26,13 @@ class Releases(Base):
     mbid = Column(Integer)
     asin = Column(Integer)
     format = Column(String(30))
+
     
+class PageMe(Base):
+    __tablename__ = 'page_me'
+    id = Column(Integer, primary_key=True)
+    name = Column(String(50))
+
 
 engine = create_engine('sqlite:///music.db')
 Base.metadata.create_all(engine)

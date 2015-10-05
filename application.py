@@ -5,6 +5,7 @@ import string
 import requests
 import httplib2
 import datetime
+import math
 
 from oauth2client.client import flow_from_clientsecrets
 from oauth2client.client import FlowExchangeError
@@ -17,7 +18,7 @@ from sqlalchemy.orm import sessionmaker
 
 import musicbrainzngs
 
-from database_setup import Base, Users, Releases
+from database_setup import Base, Users, Releases, PageMe
 
 app = Flask(__name__)
 
@@ -25,6 +26,7 @@ app = Flask(__name__)
     # open('client_secret.json', 'r').read())['web']['client_id']
 
 app.secret_key = 'super_secret_key'
+RECS_PER_PAGE = 25.0
 
 musicbrainzngs.set_useragent(
     "mmellis-music-library",
@@ -101,7 +103,18 @@ def index():
             return render_template('index.html')
     else:
         return render_template('index.html')
-        
+
+
+@app.route('/page_me/', defaults={'page': 1})
+@app.route('/page_me/<int:page>')
+def pageMe(page):
+    all_recs = session.query(PageMe).count()
+    total_pages = int(math.ceil(all_recs / RECS_PER_PAGE))
+    records = session.query(PageMe).limit(RECS_PER_PAGE).offset(RECS_PER_PAGE
+          * (page - 1))
+    return render_template('page_me.html', records=records,\
+          total_pages=total_pages, page=page)
+
 
 @app.route('/add_update_rel', methods=['POST'])
 def addUpdateRel():

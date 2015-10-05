@@ -1,0 +1,15 @@
+TOTAL PAGES: {{ total_pages }} <br>
+
+{% for record in records %}
+  {{ record.name }} <br>
+{% endfor %}
+
+<div>
+{% if page > 1 %}
+    <a href="/page_me/{{ page - 1 }}">Prev Page</a> 
+{% endif %}
+Page {{page }} of {{ total_pages }} 
+{% if page < total_pages %}
+  <a href="/page_me/{{ page + 1 }}">Next Page</a>
+{% endif %}
+</div>
