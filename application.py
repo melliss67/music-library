@@ -71,7 +71,7 @@ def releaseInfo(searchResults):
             relInfo['date'] = result['date']
         if 'label-info-list' in result:
             relInfo['label-info-list'] = result['label-info-list']
-            if 'name' in result['label-info-list'][0]:
+            if 'name' in result['label-info-list'][0]['label']:
                 relInfo['label'] = result['label-info-list'][0]['label']['name']
             if 'catalog-number' in result['label-info-list'][0]:
                 relInfo['catalog-number'] = result['label-info-list'][0]\
