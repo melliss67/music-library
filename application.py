@@ -71,7 +71,8 @@ def releaseInfo(searchResults):
             relInfo['date'] = result['date']
         if 'label-info-list' in result:
             relInfo['label-info-list'] = result['label-info-list']
-            relInfo['label'] = result['label-info-list'][0]['label']['name']
+            if 'name' in result['label-info-list'][0]:
+                relInfo['label'] = result['label-info-list'][0]['label']['name']
             if 'catalog-number' in result['label-info-list'][0]:
                 relInfo['catalog-number'] = result['label-info-list'][0]\
                       ['catalog-number']
@@ -158,6 +159,8 @@ def addUpdateRel():
 def artistSearch(artist):
     if request.method == 'POST':
         artist = request.form['artist']
+    if artist == '':
+        return redirect(url_for('artistSearch', artist='artistSearch'))
     searched = artist
     result = musicbrainzngs.search_releases(artist=artist, limit=5)
     # relList = result['release-list']
@@ -170,6 +173,8 @@ def artistSearch(artist):
 def releaseSearch(release):
     if request.method == 'POST':
         release = request.form['release']
+    if release == '':
+        return redirect(url_for('releaseSearch', artist='releaseSearch'))
     searched = release
     result = musicbrainzngs.search_releases(release=release, limit=5)
     # relList = result['release-list']
@@ -182,6 +187,8 @@ def releaseSearch(release):
 def catnoSearch(catno):
     if request.method == 'POST':
         catno = request.form['catno']
+    if catno == '':
+        return redirect(url_for('catnoSearch', catno='catnoSearch'))
     searched = catno
     result = musicbrainzngs.search_releases(catno=catno, limit=5)
     # relList = result['release-list']
@@ -194,6 +201,8 @@ def catnoSearch(catno):
 def barcodeSearch(barcode):
     if request.method == 'POST':
         barcode = request.form['barcode']
+    if barcode == '':
+        return redirect(url_for('barcodeSearch', barcode='barcodeSearch'))
     searched = barcode
     result = musicbrainzngs.search_releases(barcode=barcode, limit=5)
     # relList = result['release-list']
