@@ -8,7 +8,7 @@
   <script src="{{ url_for('static', filename='jquery-1.11.3.min.js') }}"></script>
   <script src="{{ url_for('static', filename='bootstrap.min.js') }}"></script>
 </head>
-<body>
+<body onLoad="document.getElementById('{{ search_by }}').focus();">
 <div class="container-fluid">
   <h2>Releases Search by {{ search_by }}</h2>
   <div id="information">
@@ -18,7 +18,7 @@
     </div>
     <br>
     <form action="{{ search_by }}_search" method="POST">
-      <input type="text" name="{{ search_by }}"><br>
+      <input type="text" name="{{ search_by }}" id="{{ search_by }}"><br>
       <input type="submit" value="search">
     </form>
     <div>Searched for: {{ searched }}</div>
@@ -44,6 +44,8 @@
       <input type="hidden" name="barcode" value="{{ release['barcode'] }}">
       <input type="hidden" name="mbid" value="{{ release['mbid'] }}">
       <input type="hidden" name="asin" value="{{ release['asin'] }}">
+      <input type="hidden" name="searched_form" value="{{ search_by }}">
+      <input type="hidden" name="searched_for" value="{{ searched }}">
       <tr>
         <td><input type="submit" value="add"></td>
         <td>{{ release['artist'] }}</td>

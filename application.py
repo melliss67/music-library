@@ -99,6 +99,8 @@ def index():
             return redirect(url_for('catnoSearch', catno=searched))
         if search_by == 'Artist':
             return redirect(url_for('artistSearch', artist=searched))
+        if search_by == 'Release':
+            return redirect(url_for('releaseSearch', release=searched))
         else:
             return render_template('index.html')
     else:
@@ -128,7 +130,6 @@ def addUpdateRel():
               )
         session.add(newRelease)
         session.commit()
-        return redirect(url_for('index'))
     else:
         release.artist = artist=request.form['artist']
         release.title = artist=request.form['title']
@@ -140,6 +141,16 @@ def addUpdateRel():
         release.mbid = artist=request.form['mbid']
         release.asin = artist=request.form['asin']
         session.commit()
+    
+    if request.form['searched_form'] == 'release':
+        return redirect(url_for('releaseSearch', release=request.form['searched_for']))
+    elif request.form['searched_form'] == 'barcode':
+        return redirect(url_for('barcodeSearch', barcode=request.form['searched_for']))
+    elif request.form['searched_form'] == 'catno':
+        return redirect(url_for('catnoSearch', catno=request.form['searched_for']))
+    elif request.form['searched_form'] == 'artist':
+        return redirect(url_for('artistSearch', artist=request.form['searched_for']))
+    else:
         return redirect(url_for('index'))
 
 
@@ -153,6 +164,18 @@ def artistSearch(artist):
     relList = releaseInfo(result['release-list'])
     return render_template('release_results.html', releases=relList, 
           search_by='artist', searched=searched)
+
+
+@app.route('/release_search/<string:release>', methods=['GET','POST'])
+def releaseSearch(release):
+    if request.method == 'POST':
+        release = request.form['release']
+    searched = release
+    result = musicbrainzngs.search_releases(release=release, limit=5)
+    # relList = result['release-list']
+    relList = releaseInfo(result['release-list'])
+    return render_template('release_results.html', releases=relList, 
+          search_by='release', searched=searched)
 
 
 @app.route('/catno_search/<string:catno>', methods=['GET','POST'])
