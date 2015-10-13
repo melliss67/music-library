@@ -26,7 +26,7 @@ app = Flask(__name__)
     # open('client_secret.json', 'r').read())['web']['client_id']
 
 app.secret_key = 'super_secret_key'
-RECS_PER_PAGE = 25.0
+RECS_PER_PAGE = 10.0
 
 musicbrainzngs.set_useragent(
     "mmellis-music-library",
@@ -106,6 +106,28 @@ def index():
             return render_template('index.html')
     else:
         return render_template('index.html')
+
+
+@app.route('/all_releases/', defaults={'order_by': 'artist', 'page': 1})
+@app.route('/all_releases/<string:order_by>/<int:page>')
+def allReleases(order_by, page):
+    release_count = session.query(Releases).count()
+    total_pages = int(math.ceil(release_count / RECS_PER_PAGE))
+    records = session.query(Releases).limit(RECS_PER_PAGE).offset(RECS_PER_PAGE
+          * (page - 1))
+    return render_template('library.html', records=records,\
+          total_pages=total_pages, page=page, order_by=order_by)
+
+
+@app.route('/artists/', defaults={'filter': '%', 'page': 1})
+@app.route('/artists/<string:filter>/<int:page>')
+def artists(filter, page):
+    artist_count = session.query(Releases).group_by(Releases.artist).count()
+    total_pages = int(math.ceil(artist_count / RECS_PER_PAGE))
+    records = session.query(Releases).group_by(Releases.artist).\
+          limit(RECS_PER_PAGE).offset(RECS_PER_PAGE * (page - 1))
+    return render_template('artists.html', records=records,\
+          total_pages=total_pages, page=page, filter=filter)
 
 
 @app.route('/page_me/', defaults={'page': 1})

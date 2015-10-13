@@ -1,0 +1,33 @@
+<!doctype html>
+<html>
+<head>
+  <title>Library</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='bootstrap.min.css') }}">
+  <script src="{{ url_for('static', filename='jquery-1.11.3.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='bootstrap.min.js') }}"></script>
+</head>
+<body>
+TOTAL PAGES: {{ total_pages }} <br>
+
+{% for record in records %}
+  {{ record.title }} <br>
+{% endfor %}
+<br>
+<div>
+{% if page > 1 %}
+    <a class="page_nav" href="/all_releases/{{ order_by }}/{{ page - 1 }}">Prev</a>
+{% else %}
+    <a class="page_nav" href="#">Start</a>
+{% endif %}
+<b> Page {{page }} of {{ total_pages }} </b>
+{% if page < total_pages %}
+    <a class="page_nav" href="/all_releases/{{ order_by }}/{{ page + 1 }}">Next</a>
+{% else %}
+    <a class="page_nav" href="#">End</a>
+{% endif %}
+</div>
+
+</body>
+</html>
